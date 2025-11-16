@@ -25,12 +25,14 @@ git push origin main
 1. [Vercelダッシュボード](https://vercel.com/dashboard)にログイン
 2. 「Add New...」→「Project」をクリック
 3. GitHubリポジトリを選択（またはインポート）
-4. プロジェクト設定：
+4. **重要**: プロジェクト設定で以下を設定：
+   - **Root Directory**: `frontend` を選択 ⚠️ **必須**
    - **Framework Preset**: Next.js（自動検出される場合があります）
-   - **Root Directory**: `frontend` を選択
-   - **Build Command**: `npm run build`（自動検出）
-   - **Output Directory**: `.next`（自動検出）
-   - **Install Command**: `npm install`（自動検出）
+   - **Build Command**: `npm run build`（自動検出、または`vercel.json`から読み込まれます）
+   - **Output Directory**: `.next`（自動検出、または`vercel.json`から読み込まれます）
+   - **Install Command**: `npm install`（自動検出、または`vercel.json`から読み込まれます）
+
+⚠️ **注意**: Root Directoryを`frontend`に設定しないと、ビルドエラーが発生します。
 
 ### 3. 環境変数の設定
 
