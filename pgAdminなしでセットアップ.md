@@ -134,3 +134,4 @@ PostgreSQLを再インストールして、pgAdminも一緒にインストール
 
 
 
+

@@ -16,3 +16,4 @@ ALTER TABLE monthly_menus ADD COLUMN IF NOT EXISTS price INTEGER;
 
 
 
+
