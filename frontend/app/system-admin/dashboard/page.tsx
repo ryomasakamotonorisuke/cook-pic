@@ -100,7 +100,10 @@ export default function SystemAdminDashboardPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="px-5 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border-2 border-red-400/30"
+              style={{
+                boxShadow: '0 6px 20px rgba(239, 68, 68, 0.4), 0 2px 8px rgba(239, 68, 68, 0.3)'
+              }}
             >
               ログアウト
             </button>
@@ -148,7 +151,7 @@ export default function SystemAdminDashboardPage() {
           {/* 店舗管理 */}
           <Link
             href="/system-admin/stores"
-            className="restaurant-card p-8 group animate-slide-up"
+            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-orange-300/50"
             style={{ animationDelay: '0.2s' }}
           >
             <div className="flex items-start space-x-4">
@@ -170,7 +173,7 @@ export default function SystemAdminDashboardPage() {
           {/* システム管理者管理 */}
           <Link
             href="/system-admin/admins"
-            className="restaurant-card p-8 group animate-slide-up"
+            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-yellow-300/50"
             style={{ animationDelay: '0.3s' }}
           >
             <div className="flex items-start space-x-4">
@@ -192,7 +195,7 @@ export default function SystemAdminDashboardPage() {
           {/* 利用統計 */}
           <Link
             href="/system-admin/analytics"
-            className="restaurant-card p-8 group animate-slide-up"
+            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-red-300/50"
             style={{ animationDelay: '0.4s' }}
           >
             <div className="flex items-start space-x-4">
