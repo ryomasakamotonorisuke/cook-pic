@@ -346,7 +346,7 @@ export default function CalendarMenuPage() {
                   
                   {menuCount > 0 && (
                     <div className="flex-1 flex flex-col gap-1">
-                      {dayMenu?.dailyMenus.length > 0 && (
+                      {dayMenu && dayMenu.dailyMenus.length > 0 && (
                         <div className="flex items-center space-x-1">
                           <span className="w-2 h-2 rounded-full bg-[#FF6B35]" title="日次メニュー"></span>
                           <span className="text-xs text-[#8B7355] truncate">
@@ -364,7 +364,7 @@ export default function CalendarMenuPage() {
                         </div>
                       )}
                       
-                      {dayMenu?.monthlyMenus.length > 0 && (
+                      {dayMenu && dayMenu.monthlyMenus.length > 0 && (
                         <div className="flex items-center space-x-1">
                           <span className="w-2 h-2 rounded-full bg-[#B19CD9]" title="月間メニュー"></span>
                           <span className="text-xs text-[#8B7355] truncate">
