@@ -34,13 +34,18 @@ export default function SystemAdminDashboardPage() {
         }
 
         // 店舗数と管理者数を取得
-        const [storesRes, adminsRes] = await Promise.all([
-          systemAdminApi.get('/system-admin/stores/count'),
-          systemAdminApi.get('/system-admin/admins/count'),
-        ]);
+        try {
+          const [storesRes, adminsRes] = await Promise.all([
+            systemAdminApi.get('/system-admin/stores/count'),
+            systemAdminApi.get('/system-admin/admins/count'),
+          ]);
 
-        setStoreCount(storesRes.data.count || 0);
-        setAdminCount(adminsRes.data.count || 0);
+          setStoreCount(storesRes.data.count || 0);
+          setAdminCount(adminsRes.data.count || 0);
+        } catch (error) {
+          console.error('Failed to fetch counts:', error);
+          // エラーが発生しても続行
+        }
       } catch (error) {
         console.error('Failed to fetch data:', error);
         router.push('/system-admin/login');
@@ -60,27 +65,42 @@ export default function SystemAdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F2F2F7] flex items-center justify-center">
-        <div className="text-[#8E8E93]">読み込み中...</div>
+      <div className="min-h-screen particle-bg flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-button mb-4 animate-float">
+            <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <p className="text-[#8B7355] font-medium">読み込み中...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7]">
+    <div className="min-h-screen particle-bg">
       {/* ヘッダー */}
-      <div className="bg-white border-b border-[#C6C6C8] sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="glass border-b border-white/20 sticky top-0 z-50 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-[#1C1C1E]">システム管理</h1>
-              <p className="text-sm text-[#8E8E93] mt-1">
-                {admin?.name} ({admin?.username})
-              </p>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl gradient-button flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold gradient-text">システム管理</h1>
+                <p className="text-sm text-[#8B7355] mt-0.5">
+                  {admin?.name} <span className="text-[#8B7355]/60">({admin?.username})</span>
+                </p>
+              </div>
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-[#FF3B30] text-white rounded-xl hover:bg-[#D70015] transition-colors"
+              className="px-5 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               ログアウト
             </button>
@@ -89,31 +109,33 @@ export default function SystemAdminDashboardPage() {
       </div>
 
       {/* メインコンテンツ */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* 統計カード */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div className="restaurant-card p-8 animate-slide-up">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#8E8E93] text-sm mb-1">登録店舗数</p>
-                <p className="text-3xl font-bold text-[#1C1C1E]">{storeCount}</p>
+                <p className="text-[#8B7355] text-sm font-medium mb-2">登録店舗数</p>
+                <p className="text-5xl font-bold gradient-text">{storeCount}</p>
+                <p className="text-xs text-[#8B7355]/60 mt-2">店舗</p>
               </div>
-              <div className="w-12 h-12 bg-[#007AFF] bg-opacity-10 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <div className="restaurant-card p-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#8E8E93] text-sm mb-1">システム管理者数</p>
-                <p className="text-3xl font-bold text-[#1C1C1E]">{adminCount}</p>
+                <p className="text-[#8B7355] text-sm font-medium mb-2">システム管理者数</p>
+                <p className="text-5xl font-bold gradient-text">{adminCount}</p>
+                <p className="text-xs text-[#8B7355]/60 mt-2">管理者</p>
               </div>
-              <div className="w-12 h-12 bg-[#34C759] bg-opacity-10 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#34C759]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
@@ -126,19 +148,20 @@ export default function SystemAdminDashboardPage() {
           {/* 店舗管理 */}
           <Link
             href="/system-admin/stores"
-            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+            className="restaurant-card p-8 group animate-slide-up"
+            style={{ animationDelay: '0.2s' }}
           >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#007AFF] bg-opacity-10 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start space-x-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-[#1C1C1E] mb-1">店舗管理</h3>
-                <p className="text-sm text-[#8E8E93]">店舗の登録・編集・削除</p>
+                <h3 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:gradient-text transition-all">店舗管理</h3>
+                <p className="text-sm text-[#8B7355] leading-relaxed">店舗の登録・編集・削除を行います</p>
               </div>
-              <svg className="w-5 h-5 text-[#8E8E93]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#8B7355] group-hover:text-[#FF6B35] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -147,19 +170,20 @@ export default function SystemAdminDashboardPage() {
           {/* システム管理者管理 */}
           <Link
             href="/system-admin/admins"
-            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+            className="restaurant-card p-8 group animate-slide-up"
+            style={{ animationDelay: '0.3s' }}
           >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#34C759] bg-opacity-10 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#34C759]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start space-x-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-[#1C1C1E] mb-1">システム管理者管理</h3>
-                <p className="text-sm text-[#8E8E93]">システム管理者の追加・編集</p>
+                <h3 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:gradient-text transition-all">システム管理者管理</h3>
+                <p className="text-sm text-[#8B7355] leading-relaxed">システム管理者の追加・編集を行います</p>
               </div>
-              <svg className="w-5 h-5 text-[#8E8E93]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#8B7355] group-hover:text-[#FF6B35] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -168,19 +192,20 @@ export default function SystemAdminDashboardPage() {
           {/* 利用統計 */}
           <Link
             href="/system-admin/analytics"
-            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+            className="restaurant-card p-8 group animate-slide-up"
+            style={{ animationDelay: '0.4s' }}
           >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#FF9500] bg-opacity-10 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#FF9500]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start space-x-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-[#1C1C1E] mb-1">利用統計</h3>
-                <p className="text-sm text-[#8E8E93]">アクセス数や利用状況の確認</p>
+                <h3 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:gradient-text transition-all">利用統計</h3>
+                <p className="text-sm text-[#8B7355] leading-relaxed">アクセス数や利用状況を確認します</p>
               </div>
-              <svg className="w-5 h-5 text-[#8E8E93]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#8B7355] group-hover:text-[#FF6B35] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -190,4 +215,3 @@ export default function SystemAdminDashboardPage() {
     </div>
   );
 }
-
