@@ -3,12 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --restaurant-primary: #FF6B35;
-  --restaurant-secondary: #F7931E;
-  --restaurant-accent: #FFD23F;
+  /* ベースカラー */
   --restaurant-dark: #2C1810;
   --restaurant-light: #FFF8F0;
   --restaurant-gray: #8B7355;
+  
+  /* システム管理者テーマ（パステルパープル/ラベンダー） */
+  --system-admin-primary: #B19CD9;
+  --system-admin-secondary: #C8B3E8;
+  --system-admin-accent: #E6D9F5;
+  --system-admin-gradient: linear-gradient(135deg, #B19CD9 0%, #C8B3E8 50%, #E6D9F5 100%);
+  --system-admin-bg: linear-gradient(135deg, #F5F0FF 0%, #F0E8FF 50%, #EBE0FF 100%);
+  
+  /* 店舗管理者テーマ（パステルブルー） */
+  --store-admin-primary: #8FC4E8;
+  --store-admin-secondary: #A8D4F0;
+  --store-admin-accent: #C1E4F8;
+  --store-admin-gradient: linear-gradient(135deg, #8FC4E8 0%, #A8D4F0 50%, #C1E4F8 100%);
+  --store-admin-bg: linear-gradient(135deg, #F0F8FF 0%, #E8F4FF 50%, #E0F0FF 100%);
+  
+  /* システム利用者テーマ（パステルグリーン） */
+  --user-primary: #A8D5BA;
+  --user-secondary: #B8E0CA;
+  --user-accent: #C8EBD9;
+  --user-gradient: linear-gradient(135deg, #A8D5BA 0%, #B8E0CA 50%, #C8EBD9 100%);
+  --user-bg: linear-gradient(135deg, #F0FFF4 0%, #E8FFF0 50%, #E0FFEC 100%);
+  
+  /* 食事ページ/写真ページテーマ（パステルオレンジ/ピーチ） */
+  --menu-primary: #FFB3A7;
+  --menu-secondary: #FFC4BA;
+  --menu-accent: #FFD5CD;
+  --menu-gradient: linear-gradient(135deg, #FFB3A7 0%, #FFC4BA 50%, #FFD5CD 100%);
+  --menu-bg: linear-gradient(135deg, #FFF5F0 0%, #FFF0E8 50%, #FFEBE0 100%);
 }
 
 * {
@@ -20,9 +46,26 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  background: linear-gradient(135deg, #FFF8F0 0%, #FFE5D4 50%, #FFD4B3 100%);
+  background: var(--user-bg);
   color: var(--restaurant-dark);
   min-height: 100vh;
+}
+
+/* テーマ別の背景 */
+.theme-system-admin {
+  background: var(--system-admin-bg) !important;
+}
+
+.theme-store-admin {
+  background: var(--store-admin-bg) !important;
+}
+
+.theme-user {
+  background: var(--user-bg) !important;
+}
+
+.theme-menu {
+  background: var(--menu-bg) !important;
 }
 
 /* 2025年風のアニメーション */
@@ -78,6 +121,15 @@ body {
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(177, 156, 217, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(177, 156, 217, 0.5);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out;
 }
@@ -90,58 +142,173 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* ガラスモーフィズム効果 */
+/* ガラスモーフィズム効果（テーマ別） */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
 }
 
-.glass-dark {
-  background: rgba(44, 24, 16, 0.8);
+.glass-system-admin {
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(177, 156, 217, 0.2);
+  box-shadow: 0 8px 32px rgba(177, 156, 217, 0.15);
 }
 
-/* グラデーションボタン */
+.glass-store-admin {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(143, 196, 232, 0.2);
+  box-shadow: 0 8px 32px rgba(143, 196, 232, 0.15);
+}
+
+.glass-user {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(168, 213, 186, 0.2);
+  box-shadow: 0 8px 32px rgba(168, 213, 186, 0.15);
+}
+
+.glass-menu {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 179, 167, 0.25);
+  box-shadow: 0 8px 32px rgba(255, 179, 167, 0.15);
+}
+
+/* グラデーションボタン（テーマ別） */
 .gradient-button {
-  background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FFD23F 100%);
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5), 0 2px 8px rgba(255, 107, 53, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.gradient-button:hover {
+.gradient-button-system-admin {
+  background: var(--system-admin-gradient);
+  box-shadow: 0 6px 20px rgba(177, 156, 217, 0.4), 0 2px 8px rgba(177, 156, 217, 0.3);
+}
+
+.gradient-button-system-admin:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.7), 0 4px 12px rgba(255, 107, 53, 0.4);
-  filter: brightness(1.1);
+  box-shadow: 0 10px 30px rgba(177, 156, 217, 0.6), 0 4px 12px rgba(177, 156, 217, 0.4);
+  filter: brightness(1.05);
+}
+
+.gradient-button-store-admin {
+  background: var(--store-admin-gradient);
+  box-shadow: 0 6px 20px rgba(143, 196, 232, 0.4), 0 2px 8px rgba(143, 196, 232, 0.3);
+}
+
+.gradient-button-store-admin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(143, 196, 232, 0.6), 0 4px 12px rgba(143, 196, 232, 0.4);
+  filter: brightness(1.05);
+}
+
+.gradient-button-user {
+  background: var(--user-gradient);
+  box-shadow: 0 6px 20px rgba(168, 213, 186, 0.4), 0 2px 8px rgba(168, 213, 186, 0.3);
+}
+
+.gradient-button-user:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(168, 213, 186, 0.6), 0 4px 12px rgba(168, 213, 186, 0.4);
+  filter: brightness(1.05);
+}
+
+.gradient-button-menu {
+  background: var(--menu-gradient);
+  box-shadow: 0 6px 20px rgba(255, 179, 167, 0.4), 0 2px 8px rgba(255, 179, 167, 0.3);
+}
+
+.gradient-button-menu:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(255, 179, 167, 0.6), 0 4px 12px rgba(255, 179, 167, 0.4);
+  filter: brightness(1.05);
 }
 
 .gradient-button:active {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5);
 }
 
-/* プライマリボタン（より明確なコントラスト） */
+/* プライマリボタン（テーマ別） */
 .btn-primary {
-  background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
   color: white;
   font-weight: 700;
   padding: 16px 32px;
   border-radius: 16px;
   border: none;
-  box-shadow: 
-    0 8px 24px rgba(255, 107, 53, 0.4),
-    0 4px 12px rgba(255, 107, 53, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}
+
+.btn-primary-system-admin {
+  background: linear-gradient(135deg, #B19CD9 0%, #C8B3E8 100%);
+  box-shadow: 
+    0 8px 24px rgba(177, 156, 217, 0.4),
+    0 4px 12px rgba(177, 156, 217, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary-system-admin:hover {
+  box-shadow: 
+    0 12px 32px rgba(177, 156, 217, 0.5),
+    0 6px 16px rgba(177, 156, 217, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary-store-admin {
+  background: linear-gradient(135deg, #8FC4E8 0%, #A8D4F0 100%);
+  box-shadow: 
+    0 8px 24px rgba(143, 196, 232, 0.4),
+    0 4px 12px rgba(143, 196, 232, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary-store-admin:hover {
+  box-shadow: 
+    0 12px 32px rgba(143, 196, 232, 0.5),
+    0 6px 16px rgba(143, 196, 232, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary-user {
+  background: linear-gradient(135deg, #A8D5BA 0%, #B8E0CA 100%);
+  box-shadow: 
+    0 8px 24px rgba(168, 213, 186, 0.4),
+    0 4px 12px rgba(168, 213, 186, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary-user:hover {
+  box-shadow: 
+    0 12px 32px rgba(168, 213, 186, 0.5),
+    0 6px 16px rgba(168, 213, 186, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary-menu {
+  background: linear-gradient(135deg, #FFB3A7 0%, #FFC4BA 100%);
+  box-shadow: 
+    0 8px 24px rgba(255, 179, 167, 0.4),
+    0 4px 12px rgba(255, 179, 167, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary-menu:hover {
+  box-shadow: 
+    0 12px 32px rgba(255, 179, 167, 0.5),
+    0 6px 16px rgba(255, 179, 167, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .btn-primary::before {
@@ -151,7 +318,7 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   transition: left 0.5s;
 }
 
@@ -161,18 +328,11 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 
-    0 12px 32px rgba(255, 107, 53, 0.5),
-    0 6px 16px rgba(255, 107, 53, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   filter: brightness(1.05);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 
-    0 4px 12px rgba(255, 107, 53, 0.4),
-    0 2px 6px rgba(255, 107, 53, 0.3);
 }
 
 .btn-primary:disabled {
@@ -181,63 +341,144 @@ body {
   transform: none;
 }
 
-/* 飲食店風のカード */
+/* 飲食店風のカード（テーマ別） */
 .restaurant-card {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.7);
   border-radius: 24px;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .restaurant-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 
-    0 16px 48px rgba(255, 107, 53, 0.25),
-    0 4px 16px rgba(255, 107, 53, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-6px);
   background: rgba(255, 255, 255, 1);
 }
 
-/* 飲食店風の入力フィールド */
+.restaurant-card-system-admin {
+  border-color: rgba(177, 156, 217, 0.3);
+}
+
+.restaurant-card-system-admin:hover {
+  box-shadow: 
+    0 20px 60px rgba(177, 156, 217, 0.25),
+    0 8px 24px rgba(177, 156, 217, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(177, 156, 217, 0.5);
+}
+
+.restaurant-card-store-admin {
+  border-color: rgba(143, 196, 232, 0.3);
+}
+
+.restaurant-card-store-admin:hover {
+  box-shadow: 
+    0 20px 60px rgba(143, 196, 232, 0.25),
+    0 8px 24px rgba(143, 196, 232, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(143, 196, 232, 0.5);
+}
+
+.restaurant-card-user {
+  border-color: rgba(168, 213, 186, 0.3);
+}
+
+.restaurant-card-user:hover {
+  box-shadow: 
+    0 20px 60px rgba(168, 213, 186, 0.25),
+    0 8px 24px rgba(168, 213, 186, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(168, 213, 186, 0.5);
+}
+
+.restaurant-card-menu {
+  border-color: rgba(255, 179, 167, 0.3);
+}
+
+.restaurant-card-menu:hover {
+  box-shadow: 
+    0 20px 60px rgba(255, 179, 167, 0.25),
+    0 8px 24px rgba(255, 179, 167, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(255, 179, 167, 0.5);
+}
+
+/* 飲食店風の入力フィールド（テーマ別） */
 .restaurant-input {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 107, 53, 0.2);
   border-radius: 16px;
   padding: 14px 18px;
   transition: all 0.3s ease;
   color: var(--restaurant-dark);
+  border: 2px solid rgba(0, 0, 0, 0.08);
 }
 
-.restaurant-input:focus {
+.restaurant-input-system-admin:focus {
   outline: none;
-  border-color: #FF6B35;
-  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+  border-color: var(--system-admin-primary);
+  box-shadow: 0 0 0 4px rgba(177, 156, 217, 0.15);
   background: rgba(255, 255, 255, 1);
 }
 
-/* グラデーションテキスト */
+.restaurant-input-store-admin:focus {
+  outline: none;
+  border-color: var(--store-admin-primary);
+  box-shadow: 0 0 0 4px rgba(143, 196, 232, 0.15);
+  background: rgba(255, 255, 255, 1);
+}
+
+.restaurant-input-user:focus {
+  outline: none;
+  border-color: var(--user-primary);
+  box-shadow: 0 0 0 4px rgba(168, 213, 186, 0.15);
+  background: rgba(255, 255, 255, 1);
+}
+
+.restaurant-input-menu:focus {
+  outline: none;
+  border-color: var(--menu-primary);
+  box-shadow: 0 0 0 4px rgba(255, 179, 167, 0.15);
+  background: rgba(255, 255, 255, 1);
+}
+
+/* グラデーションテキスト（テーマ別） */
 .gradient-text {
-  background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FFD23F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 800;
 }
 
-/* パーティクル背景効果 */
+.gradient-text-system-admin {
+  background: var(--system-admin-gradient);
+}
+
+.gradient-text-store-admin {
+  background: var(--store-admin-gradient);
+}
+
+.gradient-text-user {
+  background: var(--user-gradient);
+}
+
+.gradient-text-menu {
+  background: var(--menu-gradient);
+}
+
+/* パーティクル背景効果（テーマ別） */
 .particle-bg {
   position: relative;
   overflow: hidden;
 }
 
-.particle-bg::before {
+.particle-bg-system-admin::before {
   content: '';
   position: absolute;
   top: 0;
@@ -245,9 +486,54 @@ body {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(247, 147, 30, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(255, 210, 63, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(177, 156, 217, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(200, 179, 232, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(230, 217, 245, 0.2) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle-bg-store-admin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(143, 196, 232, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168, 212, 240, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(193, 228, 248, 0.2) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle-bg-user::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(168, 213, 186, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(184, 224, 202, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(200, 235, 217, 0.2) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle-bg-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 179, 167, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 196, 186, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 213, 205, 0.2) 0%, transparent 50%);
   animation: float 20s ease-in-out infinite;
   pointer-events: none;
 }
@@ -259,4 +545,46 @@ body {
 
 .soft-shadow-lg {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* メニューカード（食事ページ用） */
+.menu-item-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 179, 167, 0.25);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 24px rgba(255, 179, 167, 0.15),
+    0 2px 8px rgba(255, 179, 167, 0.1);
+}
+
+.menu-item-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 16px 40px rgba(255, 179, 167, 0.25),
+    0 4px 16px rgba(255, 179, 167, 0.15);
+  border-color: rgba(255, 179, 167, 0.4);
+}
+
+/* 画像コンテナ */
+.menu-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FFE5D4 0%, #FFD4B3 100%);
+}
+
+.menu-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-item-card:hover .menu-image-container img {
+  transform: scale(1.1);
 }

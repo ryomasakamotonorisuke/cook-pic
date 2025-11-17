@@ -33,21 +33,21 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen particle-bg flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen theme-store-admin particle-bg-store-admin flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md animate-fade-in">
         {/* ロゴ・タイトルエリア */}
         <div className="text-center mb-10 animate-slide-up">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 mb-6 animate-float shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl gradient-button gradient-button-store-admin mb-6 animate-float shadow-lg">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          <h1 className="text-4xl font-bold gradient-text mb-3">店舗管理ログイン</h1>
+          <h1 className="text-4xl font-bold gradient-text gradient-text-store-admin mb-3">店舗管理ログイン</h1>
           <p className="text-[#8B7355] text-lg">美味しい管理を、もっと簡単に</p>
         </div>
 
         {/* ログインフォーム */}
-        <div className="glass restaurant-card p-8 animate-slide-up">
+        <div className="glass restaurant-card restaurant-card-store-admin p-8 animate-slide-up">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border-2 border-red-200 text-red-700 px-5 py-4 rounded-xl whitespace-pre-wrap animate-fade-in">
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
                   type="text"
                   value={storeId}
                   onChange={(e) => setStoreId(e.target.value)}
-                  className="restaurant-input w-full pl-12 pr-4"
+                  className="restaurant-input restaurant-input-store-admin w-full pl-12 pr-4"
                   placeholder="店舗IDを入力"
                   required
                 />
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="restaurant-input w-full pl-12 pr-4"
+                  className="restaurant-input restaurant-input-store-admin w-full pl-12 pr-4"
                   placeholder="パスワードを入力"
                   required
                 />
@@ -107,7 +107,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="btn-primary btn-primary-store-admin w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? (
                 <span className="flex items-center justify-center space-x-2">

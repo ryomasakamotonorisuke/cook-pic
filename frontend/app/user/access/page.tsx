@@ -64,21 +64,21 @@ export default function UserAccessPage() {
   };
 
   return (
-    <div className="min-h-screen particle-bg flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen theme-user particle-bg-user flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md animate-fade-in">
         {/* ヘッダー */}
         <div className="text-center mb-10 animate-slide-up">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-green-500 to-green-700 mb-6 animate-float shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl gradient-button gradient-button-user mb-6 animate-float shadow-lg">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           </div>
-          <h1 className="text-4xl font-bold gradient-text mb-3">店舗メニューにアクセス</h1>
+          <h1 className="text-4xl font-bold gradient-text gradient-text-user mb-3">店舗メニューにアクセス</h1>
           <p className="text-[#8B7355] text-lg">QRコードをスキャンするか、店舗IDを入力してください</p>
         </div>
         
         {!qrMode ? (
-          <div className="glass restaurant-card p-8 animate-slide-up">
+          <div className="glass restaurant-card restaurant-card-user p-8 animate-slide-up">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="store_id" className="block text-sm font-semibold text-[#2C1810]">
@@ -97,7 +97,7 @@ export default function UserAccessPage() {
                     onChange={(e) => setStoreId(e.target.value)}
                     required
                     placeholder="例: sample-store-001"
-                    className="restaurant-input w-full pl-12 pr-4"
+                    className="restaurant-input restaurant-input-user w-full pl-12 pr-4"
                     autoFocus
                   />
                 </div>
@@ -117,7 +117,7 @@ export default function UserAccessPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="btn-primary btn-primary-user w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center space-x-2">
@@ -156,9 +156,9 @@ export default function UserAccessPage() {
             </form>
           </div>
         ) : (
-          <div className="glass restaurant-card p-8 animate-slide-up space-y-6">
+          <div className="glass-user restaurant-card restaurant-card-user p-8 animate-slide-up space-y-6">
             <div>
-              <h2 className="text-2xl font-bold gradient-text mb-2 text-center">QRコードをスキャン</h2>
+              <h2 className="text-2xl font-bold gradient-text gradient-text-user mb-2 text-center">QRコードをスキャン</h2>
               <p className="text-[#8B7355] text-center text-sm">
                 カメラをQRコードに向けてください
               </p>

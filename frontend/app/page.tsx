@@ -2,7 +2,7 @@
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen particle-bg flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen theme-user particle-bg-user flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-5xl">
         {/* ヘッダー */}
         <div className="text-center mb-16 animate-fade-in">
@@ -21,16 +21,16 @@ export default function HomePage() {
           {/* システム管理者カード */}
           <a
             href="/system-admin/login"
-            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-purple-300/50"
+            className="restaurant-card restaurant-card-system-admin p-8 group animate-slide-up border-2 border-transparent hover:border-purple-300/50"
             style={{ animationDelay: '0.1s' }}
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #B19CD9 0%, #C8B3E8 100%)' }}>
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text transition-all">システム管理者</h2>
+              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text-system-admin transition-all">システム管理者</h2>
               <p className="text-[#8B7355] text-sm leading-relaxed mb-6">
                 店舗管理・ユーザー管理ができます
               </p>
@@ -46,16 +46,16 @@ export default function HomePage() {
           {/* 店舗管理者カード */}
           <a
             href="/admin/login"
-            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-blue-300/50"
+            className="restaurant-card restaurant-card-store-admin p-8 group animate-slide-up border-2 border-transparent hover:border-blue-300/50"
             style={{ animationDelay: '0.2s' }}
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #8FC4E8 0%, #A8D4F0 100%)' }}>
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text transition-all">店舗管理</h2>
+              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text-store-admin transition-all">店舗管理</h2>
               <p className="text-[#8B7355] text-sm leading-relaxed mb-6">
                 メニューの登録・編集・削除ができます
               </p>
@@ -71,16 +71,16 @@ export default function HomePage() {
           {/* ユーザーカード */}
           <a
             href="/user/access"
-            className="restaurant-card p-8 group animate-slide-up border-2 border-transparent hover:border-green-300/50"
+            className="restaurant-card restaurant-card-user p-8 group animate-slide-up border-2 border-transparent hover:border-green-300/50"
             style={{ animationDelay: '0.3s' }}
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #A8D5BA 0%, #B8E0CA 100%)' }}>
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text transition-all">利用者</h2>
+              <h2 className="text-2xl font-bold text-[#2C1810] mb-3 group-hover:gradient-text-user transition-all">利用者</h2>
               <p className="text-[#8B7355] text-sm leading-relaxed mb-6">
                 店舗メニューを閲覧できます
               </p>
@@ -101,7 +101,7 @@ export default function HomePage() {
           </p>
           
           {/* ログインページへの直接リンク */}
-          <div className="glass restaurant-card p-6 inline-block">
+          <div className="glass-user restaurant-card restaurant-card-user p-6 inline-block">
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="/system-admin/login"
