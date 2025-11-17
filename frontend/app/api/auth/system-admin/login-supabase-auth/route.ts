@@ -28,8 +28,27 @@ export async function POST(request: NextRequest) {
 
     if (!supabaseUrl || !supabaseAnonKey) {
       console.error('Missing Supabase environment variables');
+      console.error('Supabase URL:', supabaseUrl ? 'Set' : 'Missing');
+      console.error('Supabase Anon Key:', supabaseAnonKey ? 'Set' : 'Missing');
       return NextResponse.json(
-        { error: 'サーバー設定エラー: Supabase環境変数が設定されていません', details: '環境変数を確認してください' },
+        { 
+          error: 'サーバー設定エラー: Supabase環境変数が設定されていません', 
+          details: `NEXT_PUBLIC_SUPABASE_URL: ${supabaseUrl ? 'Set' : 'Missing'}, NEXT_PUBLIC_SUPABASE_ANON_KEY: ${supabaseAnonKey ? 'Set' : 'Missing'}`,
+          solution: 'Vercelの環境変数を確認してください'
+        },
+        { status: 500 }
+      );
+    }
+
+    // APIキーの形式を確認
+    if (supabaseAnonKey.length < 100) {
+      console.error('Invalid Supabase Anon Key format (too short)');
+      return NextResponse.json(
+        { 
+          error: '無効なSupabase APIキーです', 
+          details: 'APIキーの長さが正しくありません。Vercelの環境変数を確認してください。',
+          solution: 'Supabaseダッシュボードで正しいAnon Keyをコピーして、Vercelの環境変数に設定してください'
+        },
         { status: 500 }
       );
     }
@@ -49,6 +68,20 @@ export async function POST(request: NextRequest) {
       console.error('Error code:', authError.status);
       console.error('Error message:', authError.message);
       console.error('Full error:', JSON.stringify(authError, null, 2));
+      
+      // APIキーエラーの場合、より詳細なメッセージを返す
+      if (authError.message?.includes('Invalid API key') || authError.message?.includes('API key')) {
+        return NextResponse.json(
+          { 
+            error: 'Supabase APIキーが無効です',
+            details: 'Vercelの環境変数 NEXT_PUBLIC_SUPABASE_ANON_KEY が正しく設定されていないか、無効です。',
+            solution: '1. Supabaseダッシュボードで正しいAnon Keyをコピー\n2. Vercelの環境変数に設定\n3. 再デプロイ',
+            code: authError.status
+          },
+          { status: 401 }
+        );
+      }
+      
       return NextResponse.json(
         { 
           error: 'メールアドレスまたはパスワードが正しくありません',
