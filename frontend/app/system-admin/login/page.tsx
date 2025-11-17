@@ -6,7 +6,7 @@ import api from '@/lib/api';
 
 export default function SystemAdminLoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,16 +17,41 @@ export default function SystemAdminLoginPage() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/system-admin/login', {
-        username,
+      console.log('=== Login Request ===');
+      console.log('Endpoint: /auth/system-admin/login-supabase-auth');
+      console.log('Email:', email);
+      
+      const response = await api.post('/auth/system-admin/login-supabase-auth', {
+        email,
         password,
       });
+      
+      console.log('=== Login Success ===');
+      console.log('Response:', response.data);
 
       localStorage.setItem('system_admin_token', response.data.token);
       localStorage.setItem('system_admin', JSON.stringify(response.data.admin));
       router.push('/system-admin/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'ログインに失敗しました');
+      console.error('=== Login Error ===');
+      console.error('Full error:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      console.error('Error message:', err.message);
+      
+      const errorMessage = err.response?.data?.error || err.response?.data?.details || 'ログインに失敗しました';
+      const errorDetails = err.response?.data?.details;
+      const errorSolution = err.response?.data?.solution;
+      
+      let fullError = errorMessage;
+      if (errorDetails && errorDetails !== errorMessage) {
+        fullError += '\n\n' + errorDetails;
+      }
+      if (errorSolution) {
+        fullError += '\n\n解決方法: ' + errorSolution;
+      }
+      
+      setError(fullError);
     } finally {
       setLoading(false);
     }
@@ -37,27 +62,27 @@ export default function SystemAdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#1C1C1E] mb-2">システム管理者</h1>
-          <p className="text-[#8E8E93]">ログインしてください</p>
+          <p className="text-[#8E8E93]">Supabase Authでログインしてください</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg whitespace-pre-wrap">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-[#1C1C1E] mb-2">
-              ユーザー名
+            <label htmlFor="email" className="block text-sm font-medium text-[#1C1C1E] mb-2">
+              メールアドレス
             </label>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-[#C6C6C8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:border-transparent"
-              placeholder="ユーザー名を入力"
+              placeholder="メールアドレスを入力"
               required
             />
           </div>
