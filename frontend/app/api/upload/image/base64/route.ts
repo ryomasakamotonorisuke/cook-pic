@@ -125,11 +125,33 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: urlData.publicUrl });
   } catch (error: any) {
-    console.error('Upload error:', error);
+    console.error('Upload error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    });
+    
+    // より詳細なエラーメッセージを返す
+    let errorMessage = '画像のアップロードに失敗しました';
+    let errorDetails = error.message || 'Unknown error';
+    
+    if (error.message?.includes('createServerClient')) {
+      errorMessage = 'Supabaseクライアントの作成に失敗しました';
+      errorDetails = '環境変数が正しく設定されているか確認してください。';
+    } else if (error.message?.includes('Buffer')) {
+      errorMessage = '画像データの処理に失敗しました';
+      errorDetails = error.message;
+    } else if (error.stack) {
+      errorDetails = error.stack.split('\n')[0]; // 最初のスタック行のみ
+    }
+    
     return NextResponse.json(
       { 
-        error: error.message || '画像のアップロードに失敗しました',
-        details: error.stack,
+        error: errorMessage,
+        details: errorDetails,
+        message: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       },
       { status: 500 }
     );

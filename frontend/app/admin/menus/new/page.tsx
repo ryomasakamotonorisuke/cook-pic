@@ -130,8 +130,12 @@ export default function NewMenuPage() {
             }
           } catch (uploadError: any) {
             console.error('画像アップロードエラー:', uploadError);
-            const uploadErrorMsg = uploadError.response?.data?.error || uploadError.message || '画像のアップロードに失敗しました';
-            console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。', uploadErrorMsg);
+            const uploadErrorMsg = uploadError.response?.data?.error || uploadError.response?.data?.details || uploadError.message || '画像のアップロードに失敗しました';
+            console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。', {
+              error: uploadErrorMsg,
+              status: uploadError.response?.status,
+              details: uploadError.response?.data,
+            });
             // エラーを記録するが、処理は続行（Base64を使用）
           }
 
@@ -344,8 +348,16 @@ export default function NewMenuPage() {
           )}
 
           {error && (
-            <div className="apple-card p-4 bg-red-50 border border-red-200 animate-fade-in">
-              <p className="text-red-600 text-sm whitespace-pre-line">{error}</p>
+            <div className="apple-card p-4 bg-red-50 border-2 border-red-300 animate-fade-in">
+              <div className="flex items-start space-x-2">
+                <svg className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-red-700 text-sm font-semibold mb-1">エラーが発生しました</p>
+                  <p className="text-red-600 text-sm whitespace-pre-line">{error}</p>
+                </div>
+              </div>
             </div>
           )}
 
