@@ -74,7 +74,7 @@ export default function UserAccessPage() {
             </svg>
           </div>
           <h1 className="text-4xl font-bold gradient-text gradient-text-user mb-3">店舗メニューにアクセス</h1>
-          <p className="text-[#8B7355] text-lg">QRコードをスキャンするか、店舗IDを入力してください</p>
+          <p className="text-[#2C1810] text-lg font-semibold">QRコードをスキャンするか、店舗IDを入力してください</p>
         </div>
         
         {!qrMode ? (
@@ -86,7 +86,7 @@ export default function UserAccessPage() {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <svg className="w-5 h-5 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[#2C1810]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                   </div>
@@ -137,7 +137,7 @@ export default function UserAccessPage() {
                   <div className="w-full border-t-2 border-[#8B7355]/20"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white/70 text-[#8B7355] font-medium">または</span>
+                  <span className="px-4 bg-white/70 text-[#2C1810] font-medium">または</span>
                 </div>
               </div>
 
@@ -159,7 +159,7 @@ export default function UserAccessPage() {
           <div className="glass-user restaurant-card restaurant-card-user p-8 animate-slide-up space-y-6">
             <div>
               <h2 className="text-2xl font-bold gradient-text gradient-text-user mb-2 text-center">QRコードをスキャン</h2>
-              <p className="text-[#8B7355] text-center text-sm">
+              <p className="text-[#2C1810] text-center text-sm font-semibold">
                 カメラをQRコードに向けてください
               </p>
             </div>
@@ -175,7 +175,7 @@ export default function UserAccessPage() {
                 setQrMode(false);
                 setError('');
               }}
-              className="w-full px-6 py-3 bg-white border-2 border-[#8B7355] text-[#8B7355] rounded-xl font-bold hover:bg-[#8B7355]/10 transition-all duration-300"
+              className="w-full px-6 py-3 bg-white border-2 border-[#2C1810] text-[#2C1810] rounded-xl font-bold hover:bg-[#2C1810]/10 transition-all duration-300"
             >
               キャンセル
             </button>
