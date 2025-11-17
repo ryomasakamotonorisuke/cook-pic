@@ -114,11 +114,30 @@ export default function NewMenuPage() {
             throw new Error('画像サイズが大きすぎます。別の画像を選択してください。');
           }
 
+          // 画像をSupabase Storageにアップロード
+          let imageUrl = resizedImage; // フォールバック用
+          try {
+            const uploadResponse = await api.post('/upload/image/base64', {
+              base64: resizedImage,
+              filename: item.imageFile?.name || `menu-${Date.now()}-${i}.jpg`,
+            });
+            
+            if (uploadResponse.data?.url) {
+              imageUrl = uploadResponse.data.url;
+            } else {
+              console.warn('画像アップロードのURLが取得できませんでした。Base64を直接使用します。');
+            }
+          } catch (uploadError: any) {
+            console.error('画像アップロードエラー:', uploadError);
+            // アップロードに失敗した場合、Base64を直接使用（後方互換性のため）
+            console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。');
+          }
+
           await api.post('/menus/daily', {
             category: item.category.trim() || null,
             name: item.name.trim(),
             price: parseInt(item.price),
-            image_url: resizedImage,
+            image_url: imageUrl,
             date: date,
           });
 

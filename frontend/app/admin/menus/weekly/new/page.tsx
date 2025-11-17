@@ -67,7 +67,27 @@ function NewWeeklyMenuContent() {
       let imageUrl = null;
       if (imageFile) {
         // 画像をリサイズ（一覧表示用、最大800px）
-        imageUrl = await resizeForList(imageFile, 800);
+        const resizedImage = await resizeForList(imageFile, 800);
+        
+        // 画像をSupabase Storageにアップロード
+        try {
+          const uploadResponse = await api.post('/upload/image/base64', {
+            base64: resizedImage,
+            filename: imageFile.name || `weekly-menu-${Date.now()}.jpg`,
+          });
+          
+          if (uploadResponse.data?.url) {
+            imageUrl = uploadResponse.data.url;
+          } else {
+            console.warn('画像アップロードのURLが取得できませんでした。Base64を直接使用します。');
+            imageUrl = resizedImage;
+          }
+        } catch (uploadError: any) {
+          console.error('画像アップロードエラー:', uploadError);
+          // アップロードに失敗した場合、Base64を直接使用（後方互換性のため）
+          console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。');
+          imageUrl = resizedImage;
+        }
       }
 
       await api.post('/weekly-menus', {
