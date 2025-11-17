@@ -14,29 +14,45 @@
 -- 注意: StorageバケットはSupabaseダッシュボードから作成してください
 -- このSQLスクリプトはRLSポリシーのみを設定します
 
--- 全員が読み取り可能（公開バケット）
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'images',
-  'images',
-  true,
-  10485760, -- 10MB
-  ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-)
-ON CONFLICT (id) DO UPDATE
-SET 
-  public = true,
-  file_size_limit = 10485760,
-  allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+-- 注意: StorageバケットはSupabaseダッシュボードから作成する必要があります
+-- このSQLスクリプトはRLSポリシーのみを設定します
+-- 
+-- バケットが既に存在する場合、設定を更新します
+-- バケットが存在しない場合は、Supabaseダッシュボードから作成してください
+
+-- バケットの設定を更新（存在する場合）
+-- 注意: バケットが存在しない場合はエラーになりますが、無視して続行します
+DO $$
+BEGIN
+  -- バケットが存在する場合のみ更新
+  IF EXISTS (SELECT 1 FROM storage.buckets WHERE id = 'images') THEN
+    UPDATE storage.buckets
+    SET 
+      public = true,
+      file_size_limit = 10485760, -- 10MB
+      allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    WHERE id = 'images';
+    
+    RAISE NOTICE 'Storageバケット「images」の設定を更新しました。';
+  ELSE
+    RAISE WARNING 'Storageバケット「images」が見つかりません。Supabaseダッシュボードから作成してください。';
+  END IF;
+END $$;
+
+-- Storage RLSポリシー: 既存のポリシーを削除（存在する場合）
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can update" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can delete" ON storage.objects;
 
 -- Storage RLSポリシー: 全員が読み取り可能
-CREATE POLICY IF NOT EXISTS "Public Access"
+CREATE POLICY "Public Access"
 ON storage.objects
 FOR SELECT
 USING (bucket_id = 'images');
 
 -- Storage RLSポリシー: 認証済みユーザーがアップロード可能
-CREATE POLICY IF NOT EXISTS "Authenticated users can upload"
+CREATE POLICY "Authenticated users can upload"
 ON storage.objects
 FOR INSERT
 WITH CHECK (
@@ -45,7 +61,7 @@ WITH CHECK (
 );
 
 -- Storage RLSポリシー: 認証済みユーザーが更新可能
-CREATE POLICY IF NOT EXISTS "Authenticated users can update"
+CREATE POLICY "Authenticated users can update"
 ON storage.objects
 FOR UPDATE
 USING (
@@ -54,7 +70,7 @@ USING (
 );
 
 -- Storage RLSポリシー: 認証済みユーザーが削除可能
-CREATE POLICY IF NOT EXISTS "Authenticated users can delete"
+CREATE POLICY "Authenticated users can delete"
 ON storage.objects
 FOR DELETE
 USING (
