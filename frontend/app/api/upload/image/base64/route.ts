@@ -80,10 +80,15 @@ export async function POST(request: NextRequest) {
       });
 
     if (error) {
+      // StorageErrorのプロパティを安全に取得
+      const errorAny = error as any;
+      const statusCode = errorAny.statusCode || errorAny.status;
+      
       console.error('Supabase Storage upload error:', {
         message: error.message,
-        statusCode: error.statusCode,
-        error: JSON.stringify(error, null, 2),
+        statusCode: statusCode,
+        name: error.name,
+        error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
       
       // より詳細なエラーメッセージを返す
@@ -96,7 +101,7 @@ export async function POST(request: NextRequest) {
       } else if (error.message?.includes('new row violates row-level security') || error.message?.includes('RLS')) {
         errorMessage = 'StorageのRLSポリシーが設定されていません。';
         errorDetails = 'Supabase SQL Editorで supabase/SETUP_STORAGE.sql を実行してください。';
-      } else if (error.message?.includes('JWT')) {
+      } else if (error.message?.includes('JWT') || error.message?.includes('auth')) {
         errorMessage = '認証エラーが発生しました。';
         errorDetails = 'Service Role Keyが正しく設定されているか確認してください。';
       } else if (error.message) {
@@ -107,8 +112,8 @@ export async function POST(request: NextRequest) {
         { 
           error: errorMessage,
           details: errorDetails,
-          code: error.statusCode,
-          fullError: process.env.NODE_ENV === 'development' ? JSON.stringify(error, null, 2) : undefined,
+          code: statusCode,
+          fullError: process.env.NODE_ENV === 'development' ? JSON.stringify(error, Object.getOwnPropertyNames(error)) : undefined,
         },
         { status: 500 }
       );
