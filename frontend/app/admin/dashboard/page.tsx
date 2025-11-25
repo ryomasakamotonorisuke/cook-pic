@@ -142,8 +142,8 @@ export default function AdminDashboardPage() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:gradient-text-store-admin transition-all">日間メニューを投稿</h3>
-                <p className="text-sm text-[#2C1810] leading-relaxed">今日のメニューを写真付きで投稿</p>
+                <h3 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:gradient-text-store-admin transition-all">メニュー設定（共通）</h3>
+                <p className="text-sm text-[#2C1810] leading-relaxed">日間・週間・月間メニューを一括で登録</p>
               </div>
               <svg className="w-6 h-6 text-[#2C1810] group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

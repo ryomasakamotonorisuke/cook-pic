@@ -26,10 +26,6 @@ export default function MonthlyMenuPage() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [loading, setLoading] = useState(true);
-  const [isAdding, setIsAdding] = useState(false);
-  const [menuName, setMenuName] = useState('');
-  const [category, setCategory] = useState('');
-  const [price, setPrice] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -56,31 +52,6 @@ export default function MonthlyMenuPage() {
       console.error('Failed to fetch monthly menus:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAdd = async () => {
-    if (!menuName.trim()) {
-      alert('メニュー名を入力してください');
-      return;
-    }
-
-    try {
-      await api.post('/monthly-menus', {
-        menu_name: menuName.trim(),
-        category: category.trim() || null,
-        price: price ? parseInt(price) : null,
-        image_url: null,
-        month: selectedMonth,
-        year: selectedYear,
-      });
-      setMenuName('');
-      setCategory('');
-      setPrice('');
-      setIsAdding(false);
-      fetchMenus();
-    } catch (error: any) {
-      alert(error.response?.data?.error || '追加に失敗しました');
     }
   };
 
@@ -128,7 +99,7 @@ export default function MonthlyMenuPage() {
                 📄 CSV一括登録
               </Link>
               <Link
-                href={`/admin/menus/monthly/new?year=${selectedYear}&month=${selectedMonth}`}
+                href={`/admin/menus/new?type=monthly&year=${selectedYear}&month=${selectedMonth}`}
                 className="apple-button-primary"
               >
                 + 新規登録
@@ -181,7 +152,7 @@ export default function MonthlyMenuPage() {
             <div className="apple-card p-12 text-center">
               <p className="text-[#8E8E93] text-lg">メニューが設定されていません</p>
               <Link
-                href={`/admin/menus/monthly/new?year=${selectedYear}&month=${selectedMonth}`}
+                href={`/admin/menus/new?type=monthly&year=${selectedYear}&month=${selectedMonth}`}
                 className="inline-block mt-4 apple-button-primary"
               >
                 最初のメニューを追加

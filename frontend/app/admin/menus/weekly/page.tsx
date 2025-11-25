@@ -115,7 +115,7 @@ export default function WeeklyMenuPage() {
                 📄 CSV一括登録
               </Link>
               <Link
-                href={`/admin/menus/weekly/new?week=${weekStartDate}`}
+                href={`/admin/menus/new?type=weekly&week=${weekStartDate}`}
                 className="apple-button-primary"
               >
                 + 新規登録
@@ -183,7 +183,7 @@ export default function WeeklyMenuPage() {
                           </>
                         ) : (
                           <Link
-                            href={`/admin/menus/weekly/new?day=${day.value}&week=${weekStartDate}`}
+                            href={`/admin/menus/new?type=weekly&week=${weekStartDate}&day=${day.value}`}
                             className="px-4 py-2 text-[#007AFF] hover:bg-[#F0F8FF] rounded-xl transition-colors text-sm"
                           >
                             追加

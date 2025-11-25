@@ -166,13 +166,17 @@ export default function MenuListPage() {
                 }`}
               >
                 <div className="flex items-start space-x-4">
-                  <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#F2F2F7]">
-                    <img
-                      src={menu.image_url}
-                      alt={menu.name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
+                  <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#F2F2F7] flex items-center justify-center text-sm text-[#8E8E93]">
+                    {menu.image_url ? (
+                      <img
+                        src={menu.image_url}
+                        alt={menu.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span>画像なし</span>
+                    )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
