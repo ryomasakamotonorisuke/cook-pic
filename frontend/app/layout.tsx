@@ -17,8 +17,8 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
-  title: 'Pic_cul - 店舗メニュー',
-  description: '店舗メニュー管理システム',
+  title: '料理写真共有システム',
+  description: '料理写真共有システム',
 }
 
 export const viewport: Viewport = {

@@ -43,7 +43,6 @@ export default function AdminLoginPage() {
             </svg>
           </div>
           <h1 className="text-4xl font-bold gradient-text gradient-text-store-admin mb-3">店舗管理ログイン</h1>
-          <p className="text-[#2C1810] text-lg font-semibold">美味しい管理を、もっと簡単に</p>
         </div>
 
         {/* ログインフォーム */}

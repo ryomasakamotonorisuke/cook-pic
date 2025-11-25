@@ -1,16 +1,16 @@
 @echo off
 echo ========================================
-echo Pic_cul 開発サーバー起動スクリプト
+echo 料理写真共有システム 開発サーバー起動スクリプト
 echo ========================================
 echo.
 
 echo [1/3] バックエンドサーバーを起動中...
-start "Pic_cul Backend" cmd /k "cd backend && npm run dev"
+start "料理写真共有システム Backend" cmd /k "cd backend && npm run dev"
 
 timeout /t 3 /nobreak >nul
 
 echo [2/3] フロントエンドサーバーを起動中...
-start "Pic_cul Frontend" cmd /k "cd frontend && npm run dev"
+start "料理写真共有システム Frontend" cmd /k "cd frontend && npm run dev"
 
 timeout /t 3 /nobreak >nul
 

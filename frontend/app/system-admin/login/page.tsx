@@ -68,7 +68,6 @@ export default function SystemAdminLoginPage() {
             </svg>
           </div>
           <h1 className="text-4xl font-bold gradient-text gradient-text-system-admin mb-3">システム管理者</h1>
-          <p className="text-[#2C1810] text-lg font-semibold">美味しい管理を、もっと簡単に</p>
         </div>
 
         {/* ログインフォーム */}

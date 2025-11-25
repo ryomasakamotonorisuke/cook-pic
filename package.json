@@ -1,7 +1,7 @@
 {
-  "name": "pic-cul",
+  "name": "ryori-photo-sharing-system",
   "version": "1.0.0",
-  "description": "店舗メニュー管理システム（SNS風UI）",
+  "description": "料理写真共有システム（SNS風UI）",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",

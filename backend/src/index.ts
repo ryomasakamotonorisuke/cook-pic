@@ -27,7 +27,7 @@ app.get('/health', (req, res) => {
 
 // ルート
 app.get('/', (req, res) => {
-  res.json({ message: 'Pic_cul API Server' });
+  res.json({ message: '料理写真共有システム API Server' });
 });
 
 // 静的ファイル配信（ローカルストレージ用）
