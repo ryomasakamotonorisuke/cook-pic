@@ -81,7 +81,7 @@ export default function MonthlyMenuPage() {
                   className="w-12 h-12 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-2xl gradient-button gradient-button-menu flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-lg bg-user-primary flex items-center justify-center shadow-lg">
                   <span className="text-2xl">🏪</span>
                 </div>
               )}

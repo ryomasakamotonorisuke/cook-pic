@@ -91,3 +91,7 @@ export default function QRCodeReader({ onScanSuccess, onError }: QRCodeReaderPro
 
 
 
+
+
+
+

@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md animate-fade-in">
         {/* ロゴ・タイトルエリア */}
         <div className="text-center mb-10 animate-slide-up">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl gradient-button gradient-button-store-admin mb-6 animate-float shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-lg bg-store-admin-primary mb-6 shadow-lg">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
                   type="text"
                   value={storeId}
                   onChange={(e) => setStoreId(e.target.value)}
-                  className="restaurant-input restaurant-input-store-admin w-full pl-12 pr-4"
+                  className="restaurant-input restaurant-input-store-admin w-full pl-16 pr-4"
                   placeholder="店舗IDを入力"
                   required
                 />
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="restaurant-input restaurant-input-store-admin w-full pl-12 pr-4"
+                  className="restaurant-input restaurant-input-store-admin w-full pl-16 pr-4"
                   placeholder="パスワードを入力"
                   required
                 />

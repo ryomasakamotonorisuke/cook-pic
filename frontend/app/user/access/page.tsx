@@ -68,7 +68,7 @@ export default function UserAccessPage() {
       <div className="w-full max-w-md animate-fade-in">
         {/* ヘッダー */}
         <div className="text-center mb-10 animate-slide-up">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl gradient-button gradient-button-user mb-6 animate-float shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-lg bg-user-primary mb-6 shadow-lg">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
@@ -97,7 +97,7 @@ export default function UserAccessPage() {
                     onChange={(e) => setStoreId(e.target.value)}
                     required
                     placeholder="例: sample-store-001"
-                    className="restaurant-input restaurant-input-user w-full pl-12 pr-4"
+                    className="restaurant-input restaurant-input-user w-full pl-16 pr-4"
                     autoFocus
                   />
                 </div>

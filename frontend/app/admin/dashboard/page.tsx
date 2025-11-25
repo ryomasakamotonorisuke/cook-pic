@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="min-h-screen theme-store-admin particle-bg-store-admin flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-button gradient-button-store-admin mb-4 animate-float shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-store-admin-primary mb-4 shadow-lg">
             <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl gradient-button gradient-button-store-admin flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 rounded-lg bg-store-admin-primary flex items-center justify-center shadow-lg">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
@@ -84,10 +84,7 @@ export default function AdminDashboardPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border-2 border-red-400/30"
-              style={{
-                boxShadow: '0 6px 20px rgba(239, 68, 68, 0.4), 0 2px 8px rgba(239, 68, 68, 0.3)'
-              }}
+              className="px-6 py-2.5 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors text-sm"
             >
               ログアウト
             </button>
@@ -139,7 +136,7 @@ export default function AdminDashboardPage() {
             style={{ animationDelay: '0.1s' }}
           >
             <div className="flex items-start space-x-4">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #8FC4E8 0%, #A8D4F0 100%)' }}>
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center shadow-lg bg-store-admin-primary">
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -160,7 +157,7 @@ export default function AdminDashboardPage() {
               style={{ animationDelay: '0.2s' }}
             >
             <div className="flex items-start space-x-4">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #A8D4F0 0%, #C1E4F8 100%)' }}>
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center shadow-lg bg-store-admin-primary">
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -181,7 +178,7 @@ export default function AdminDashboardPage() {
               style={{ animationDelay: '0.3s' }}
             >
             <div className="flex items-start space-x-4">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #8FC4E8 0%, #C1E4F8 100%)' }}>
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center shadow-lg bg-store-admin-primary">
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -202,7 +199,7 @@ export default function AdminDashboardPage() {
               style={{ animationDelay: '0.4s' }}
             >
             <div className="flex items-start space-x-4">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #A8D4F0 0%, #C1E4F8 100%)' }}>
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center shadow-lg bg-store-admin-primary">
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>

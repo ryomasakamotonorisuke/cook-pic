@@ -1,9 +1,24 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-noto-sans-jp',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Pic_cul - 店舗メニュー',
-  description: 'SNS風の店舗メニュー管理システム',
+  description: '店舗メニュー管理システム',
 }
 
 export const viewport: Viewport = {
@@ -18,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja">
-      <body className="bg-white text-black">{children}</body>
+    <html lang="ja" className={`${inter.variable} ${notoSansJP.variable}`}>
+      <body className="bg-base-off text-text">{children}</body>
     </html>
   )
 }
