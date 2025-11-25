@@ -63,44 +63,30 @@ export default function AdminLoginPage() {
               <label htmlFor="store_id" className="block text-sm font-semibold text-[#2C1810]">
                 店舗ID
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-[#2C1810]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <input
-                  id="store_id"
-                  type="text"
-                  value={storeId}
-                  onChange={(e) => setStoreId(e.target.value)}
-                  className="restaurant-input restaurant-input-store-admin w-full pl-16 pr-4"
-                  placeholder="店舗IDを入力"
-                  required
-                />
-              </div>
+              <input
+                id="store_id"
+                type="text"
+                value={storeId}
+                onChange={(e) => setStoreId(e.target.value)}
+                className="restaurant-input restaurant-input-store-admin w-full"
+                placeholder="店舗IDを入力"
+                required
+              />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm font-semibold text-[#2C1810]">
                 パスワード
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-[#8B7355]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="restaurant-input restaurant-input-store-admin w-full pl-16 pr-4"
-                  placeholder="パスワードを入力"
-                  required
-                />
-              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="restaurant-input restaurant-input-store-admin w-full"
+                placeholder="パスワードを入力"
+                required
+              />
             </div>
 
             <button

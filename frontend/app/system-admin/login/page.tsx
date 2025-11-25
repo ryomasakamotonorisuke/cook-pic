@@ -88,44 +88,30 @@ export default function SystemAdminLoginPage() {
               <label htmlFor="email" className="block text-sm font-semibold text-[#2C1810]">
                 メールアドレス
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-[#2C1810]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                  </svg>
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="restaurant-input restaurant-input-system-admin w-full pl-16 pr-4"
-                  placeholder="admin@admin.com"
-                  required
-                />
-              </div>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="restaurant-input restaurant-input-system-admin w-full"
+                placeholder="admin@admin.com"
+                required
+              />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm font-semibold text-[#2C1810]">
                 パスワード
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-[#2C1810]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="restaurant-input restaurant-input-system-admin w-full pl-16 pr-4"
-                  placeholder="パスワードを入力"
-                  required
-                />
-              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="restaurant-input restaurant-input-system-admin w-full"
+                placeholder="パスワードを入力"
+                required
+              />
             </div>
 
             <button
