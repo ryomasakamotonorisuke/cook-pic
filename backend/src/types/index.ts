@@ -4,6 +4,8 @@ export interface Store {
   name: string;
   password_hash: string;
   profile_image_url?: string;
+  menu_categories?: string[];
+  business_days?: number[];
   created_at: Date;
   updated_at: Date;
 }
@@ -14,7 +16,7 @@ export interface Menu {
   name: string;
   category?: string;
   price: number;
-  image_url: string;
+  image_url?: string;
   menu_type: 'daily' | 'weekly' | 'monthly';
   date: Date;
   is_pinned?: boolean;

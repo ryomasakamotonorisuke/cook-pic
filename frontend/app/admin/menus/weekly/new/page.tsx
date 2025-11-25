@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
-import { resizeForList } from '@/lib/imageUtils';
 
 const DAYS_OF_WEEK = [
   { value: 0, label: '日曜日' },
@@ -33,24 +32,28 @@ function NewWeeklyMenuContent() {
   const [category, setCategory] = useState('');
   const [menuName, setMenuName] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState<number>(dayOfWeek ?? 1);
   const [selectedWeek, setSelectedWeek] = useState(weekStartDate);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/stores/profile');
+        setCategories(response.data.menu_categories || []);
+      } catch (err) {
+        console.error('Failed to fetch store profile:', err);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length === 0) return;
+    setCategory((prev) => (prev ? prev : categories[0]));
+  }, [categories, category]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,38 +67,12 @@ function NewWeeklyMenuContent() {
     setLoading(true);
 
     try {
-      let imageUrl = null;
-      if (imageFile) {
-        // 画像をリサイズ（一覧表示用、最大800px）
-        const resizedImage = await resizeForList(imageFile, 800);
-        
-        // 画像をSupabase Storageにアップロード
-        try {
-          const uploadResponse = await api.post('/upload/image/base64', {
-            base64: resizedImage,
-            filename: imageFile.name || `weekly-menu-${Date.now()}.jpg`,
-          });
-          
-          if (uploadResponse.data?.url) {
-            imageUrl = uploadResponse.data.url;
-          } else {
-            console.warn('画像アップロードのURLが取得できませんでした。Base64を直接使用します。');
-            imageUrl = resizedImage;
-          }
-        } catch (uploadError: any) {
-          console.error('画像アップロードエラー:', uploadError);
-          const uploadErrorMsg = uploadError.response?.data?.error || uploadError.message || '画像のアップロードに失敗しました';
-          console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。', uploadErrorMsg);
-          imageUrl = resizedImage;
-        }
-      }
-
       await api.post('/weekly-menus', {
         day_of_week: selectedDay,
         menu_name: menuName.trim(),
         category: category.trim() || null,
         price: price ? parseInt(price) : null,
-        image_url: imageUrl,
+        image_url: null,
         week_start_date: selectedWeek,
       });
 
@@ -176,14 +153,22 @@ function NewWeeklyMenuContent() {
             <label htmlFor="category" className="block text-sm font-semibold text-[#8E8E93] mb-3 uppercase tracking-wide">
               カテゴリー
             </label>
-            <input
-              id="category"
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="例: ランチ、ディナー、デザート"
-              className="apple-input"
-            />
+            {categories.length > 0 ? (
+              <select
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="apple-input"
+              >
+                {categories.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p className="text-[#8E8E93] text-sm">カテゴリーが未設定です。プロフィール設定から追加してください。</p>
+            )}
           </div>
 
           {/* メニュー名 */}

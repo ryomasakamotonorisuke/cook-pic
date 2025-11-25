@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
-import { resizeForList } from '@/lib/imageUtils';
 
 interface MonthlyMenu {
   id: string;
@@ -31,8 +30,6 @@ export default function MonthlyMenuPage() {
   const [menuName, setMenuName] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -62,18 +59,6 @@ export default function MonthlyMenuPage() {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleAdd = async () => {
     if (!menuName.trim()) {
       alert('メニュー名を入力してください');
@@ -81,25 +66,17 @@ export default function MonthlyMenuPage() {
     }
 
     try {
-      let imageUrl = null;
-      if (imageFile) {
-        // 画像をリサイズ（一覧表示用、最大800px）
-        imageUrl = await resizeForList(imageFile, 800);
-      }
-
       await api.post('/monthly-menus', {
         menu_name: menuName.trim(),
         category: category.trim() || null,
         price: price ? parseInt(price) : null,
-        image_url: imageUrl,
+        image_url: null,
         month: selectedMonth,
         year: selectedYear,
       });
       setMenuName('');
       setCategory('');
       setPrice('');
-      setImageFile(null);
-      setImagePreview('');
       setIsAdding(false);
       fetchMenus();
     } catch (error: any) {

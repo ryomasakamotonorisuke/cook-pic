@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import api from '@/lib/api';
 
 interface Store {
@@ -9,12 +10,17 @@ interface Store {
   store_id: string;
   name: string;
   profile_image_url?: string;
+  menu_categories?: string[];
+  business_days?: number[];
 }
 
 export default function ProfilePage() {
   const router = useRouter();
   const [store, setStore] = useState<Store | null>(null);
   const [name, setName] = useState('');
+  const [menuCategories, setMenuCategories] = useState<string[]>([]);
+  const [newCategory, setNewCategory] = useState('');
+  const [businessDays, setBusinessDays] = useState<number[]>([1, 2, 3, 4, 5]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -31,6 +37,9 @@ export default function ProfilePage() {
         const response = await api.get('/stores/profile');
         setStore(response.data);
         setName(response.data.name);
+        setMenuCategories(response.data.menu_categories || []);
+        const days = response.data.business_days?.length ? response.data.business_days : [1,2,3,4,5];
+        setBusinessDays(days.sort((a: number, b: number) => a - b));
       } catch (error) {
         console.error('Failed to fetch store:', error);
         router.push('/admin/login');
@@ -50,6 +59,8 @@ export default function ProfilePage() {
     try {
       const response = await api.put('/stores/profile', {
         name,
+        menu_categories: menuCategories,
+        business_days: businessDays,
       });
       setStore(response.data);
       alert('プロフィールを更新しました');
@@ -59,6 +70,37 @@ export default function ProfilePage() {
       setSaving(false);
     }
   };
+
+  const handleAddCategory = () => {
+    const trimmed = newCategory.trim();
+    if (!trimmed) return;
+    if (menuCategories.includes(trimmed)) {
+      alert('同じカテゴリーが既に存在します');
+      return;
+    }
+    setMenuCategories([...menuCategories, trimmed]);
+    setNewCategory('');
+  };
+
+  const handleRemoveCategory = (category: string) => {
+    setMenuCategories(menuCategories.filter((c) => c !== category));
+  };
+
+  const toggleBusinessDay = (day: number) => {
+    setBusinessDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day].sort()
+    );
+  };
+
+  const DAY_OPTIONS = [
+    { value: 0, label: '日' },
+    { value: 1, label: '月' },
+    { value: 2, label: '火' },
+    { value: 3, label: '水' },
+    { value: 4, label: '木' },
+    { value: 5, label: '金' },
+    { value: 6, label: '土' },
+  ];
 
   if (loading) {
     return (
@@ -110,7 +152,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="restaurant-card restaurant-card-store-admin p-6">
+          <div className="restaurant-card restaurant-card-store-admin p-6 space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-semibold text-[#2C1810] mb-2">
                 店舗名
@@ -123,6 +165,76 @@ export default function ProfilePage() {
                 required
                 className="restaurant-input restaurant-input-store-admin w-full text-[#2C1810]"
               />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-semibold text-[#2C1810]">メニューカテゴリー</label>
+                <Link href="/admin/menus/new" className="text-sm text-blue-600 hover:underline">
+                  登録画面へ
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {menuCategories.length === 0 && (
+                  <span className="text-sm text-[#2C1810]/60">カテゴリーがありません</span>
+                )}
+                {menuCategories.map((cat) => (
+                  <span
+                    key={cat}
+                    className="inline-flex items-center space-x-2 px-3 py-1 bg-white/80 border border-[#2C1810]/10 rounded-full text-sm text-[#2C1810]"
+                  >
+                    <span>{cat}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCategory(cat)}
+                      className="text-[#8E8E93] hover:text-red-500"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="例: LUNCH / ランチ"
+                  className="restaurant-input restaurant-input-store-admin flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddCategory}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  追加
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#2C1810] mb-2">
+                営業曜日
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {DAY_OPTIONS.map((day) => (
+                  <button
+                    key={day.value}
+                    type="button"
+                    onClick={() => toggleBusinessDay(day.value)}
+                    className={`px-3 py-2 rounded-xl border-2 text-sm transition ${
+                      businessDays.includes(day.value)
+                        ? 'border-green-500 bg-green-50 text-green-700'
+                        : 'border-[#E5E5EA] text-[#2C1810]'
+                    }`}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-[#2C1810]/60 mt-2">
+                選択した曜日が週間メニュー表に表示されます。
+              </p>
             </div>
           </div>
 

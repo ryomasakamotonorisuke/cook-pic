@@ -1,18 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
-import { resizeForList } from '@/lib/imageUtils';
-
 interface MenuItem {
   id: string;
   category: string;
   name: string;
   price: string;
-  imageFile: File | null;
-  imagePreview: string;
 }
 
 export default function NewMenuPage() {
@@ -23,24 +19,42 @@ export default function NewMenuPage() {
       category: '',
       name: '',
       price: '',
-      imageFile: null,
-      imagePreview: '',
     },
   ]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successCount, setSuccessCount] = useState(0);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/stores/profile');
+        setCategories(response.data.menu_categories || []);
+      } catch (err) {
+        console.error('Failed to fetch store profile:', err);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length === 0) return;
+    setMenuItems((prev) =>
+      prev.map((item) =>
+        item.category ? item : { ...item, category: categories[0] }
+      )
+    );
+  }, [categories]);
 
   const addMenuItem = () => {
     setMenuItems([
       ...menuItems,
       {
         id: Date.now().toString(),
-        category: '',
+        category: categories[0] || '',
         name: '',
         price: '',
-        imageFile: null,
-        imagePreview: '',
       },
     ]);
   };
@@ -51,32 +65,15 @@ export default function NewMenuPage() {
     }
   };
 
-  const updateMenuItem = (id: string, field: keyof MenuItem, value: string | File | null) => {
+  const updateMenuItem = (id: string, field: keyof MenuItem, value: string) => {
     setMenuItems(
       menuItems.map((item) => {
         if (item.id === id) {
-          if (field === 'imageFile' && value instanceof File) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              setMenuItems((prev) =>
-                prev.map((i) => (i.id === id ? { ...i, imagePreview: reader.result as string } : i))
-              );
-            };
-            reader.readAsDataURL(value);
-            return { ...item, imageFile: value };
-          }
           return { ...item, [field]: value };
         }
         return item;
       })
     );
-  };
-
-  const handleImageChange = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      updateMenuItem(id, 'imageFile', file);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,11 +83,11 @@ export default function NewMenuPage() {
 
     // バリデーション
     const invalidItems = menuItems.filter(
-      (item) => !item.imageFile || !item.name.trim() || !item.price || parseInt(item.price) <= 0
+      (item) => !item.name.trim() || !item.category
     );
 
     if (invalidItems.length > 0) {
-      setError('すべてのメニュー項目で、画像、メニュー名、価格を正しく入力してください');
+      setError('すべてのメニュー項目で、カテゴリーとメニュー名を入力してください');
       return;
     }
 
@@ -106,44 +103,11 @@ export default function NewMenuPage() {
       for (let i = 0; i < menuItems.length; i++) {
         const item = menuItems[i];
         try {
-          // 画像をリサイズ（一覧表示用、最大800px）
-          const resizedImage = await resizeForList(item.imageFile!, 800);
-
-          // Base64画像のサイズをチェック（10MB制限）
-          if (resizedImage.length > 10 * 1024 * 1024) {
-            throw new Error('画像サイズが大きすぎます。別の画像を選択してください。');
-          }
-
-          // 画像をSupabase Storageにアップロード
-          let imageUrl = resizedImage; // フォールバック用
-          try {
-            const uploadResponse = await api.post('/upload/image/base64', {
-              base64: resizedImage,
-              filename: item.imageFile?.name || `menu-${Date.now()}-${i}.jpg`,
-            });
-            
-            if (uploadResponse.data?.url) {
-              imageUrl = uploadResponse.data.url;
-              console.log('画像アップロード成功:', imageUrl);
-            } else {
-              console.warn('画像アップロードのURLが取得できませんでした。Base64を直接使用します。');
-            }
-          } catch (uploadError: any) {
-            console.error('画像アップロードエラー:', uploadError);
-            const uploadErrorMsg = uploadError.response?.data?.error || uploadError.response?.data?.details || uploadError.message || '画像のアップロードに失敗しました';
-            console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。', {
-              error: uploadErrorMsg,
-              status: uploadError.response?.status,
-              details: uploadError.response?.data,
-            });
-            // エラーを記録するが、処理は続行（Base64を使用）
-          }
-
           await api.post('/menus/daily', {
-            category: item.category.trim() || null,
+            category: item.category || null,
             name: item.name.trim(),
-            price: parseInt(item.price),
-            image_url: imageUrl,
+            price: item.price ? parseInt(item.price) : 0,
+            image_url: null,
             date: date,
           });
 
@@ -251,48 +215,29 @@ export default function NewMenuPage() {
                 <span className="text-lg font-bold text-[#1C1C1E]">メニュー {index + 1}</span>
               </div>
 
-              {/* 画像プレビュー */}
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#8E8E93] mb-2 uppercase tracking-wide">
-                  メニュー写真 <span className="text-red-500">*</span>
-                </label>
-                <div className="w-full aspect-square bg-[#F2F2F7] rounded-2xl overflow-hidden relative group">
-                  {item.imagePreview ? (
-                    <img
-                      src={item.imagePreview}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-[#8E8E93]">
-                      <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-sm">画像を選択してください</p>
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageChange(item.id, e)}
-                    required
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                </div>
-              </div>
-
               {/* カテゴリー */}
               <div className="mb-4">
                 <label className="block text-sm font-semibold text-[#8E8E93] mb-2 uppercase tracking-wide">
-                  カテゴリー
+                  カテゴリー <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  value={item.category}
-                  onChange={(e) => updateMenuItem(item.id, 'category', e.target.value)}
-                  placeholder="例: ランチ、ディナー、デザート"
-                  className="apple-input"
-                />
+                {categories.length > 0 ? (
+                  <select
+                    value={item.category || ''}
+                    onChange={(e) => updateMenuItem(item.id, 'category', e.target.value)}
+                    className="apple-input"
+                  >
+                    <option value="">選択してください</option>
+                    {categories.map((categoryOption) => (
+                      <option key={categoryOption} value={categoryOption}>
+                        {categoryOption}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <p className="text-sm text-[#8E8E93]">
+                    カテゴリーがありません。プロフィール設定から追加してください。
+                  </p>
+                )}
               </div>
 
               {/* メニュー名 */}

@@ -24,13 +24,8 @@ router.post('/daily', authenticateAdmin, async (req: AuthRequest, res) => {
       return res.status(401).json({ error: '認証が必要です' });
     }
 
-    if (!name || price === undefined || !image_url) {
-      return res.status(400).json({ error: 'メニュー名、価格、画像URLが必要です' });
-    }
-
-    // Base64画像のサイズチェック（10MB制限）
-    if (image_url.length > 10 * 1024 * 1024) {
-      return res.status(400).json({ error: '画像サイズが大きすぎます（10MB以下）' });
+    if (!name || price === undefined) {
+      return res.status(400).json({ error: 'メニュー名と価格が必要です' });
     }
 
     try {
@@ -39,7 +34,7 @@ router.post('/daily', authenticateAdmin, async (req: AuthRequest, res) => {
         name,
         category: category || null,
         price: parseInt(price),
-        image_url,
+        image_url: image_url || null,
         menu_type: 'daily',
         date: date ? new Date(date) : new Date(),
       });

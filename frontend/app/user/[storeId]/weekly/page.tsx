@@ -20,16 +20,26 @@ interface Store {
   store_id: string;
   name: string;
   profile_image_url?: string;
+  menu_categories?: string[];
+  business_days?: number[];
 }
 
 const DAYS_OF_WEEK = [
-  { value: 0, label: '日', full: '日曜日' },
-  { value: 1, label: '月', full: '月曜日' },
-  { value: 2, label: '火', full: '火曜日' },
-  { value: 3, label: '水', full: '水曜日' },
-  { value: 4, label: '木', full: '木曜日' },
-  { value: 5, label: '金', full: '金曜日' },
-  { value: 6, label: '土', full: '土曜日' },
+  { value: 0, label: '日', full: '日曜日', short: 'SUN' },
+  { value: 1, label: '月', full: '月曜日', short: 'MON' },
+  { value: 2, label: '火', full: '火曜日', short: 'TUE' },
+  { value: 3, label: '水', full: '水曜日', short: 'WED' },
+  { value: 4, label: '木', full: '木曜日', short: 'THU' },
+  { value: 5, label: '金', full: '金曜日', short: 'FRI' },
+  { value: 6, label: '土', full: '土曜日', short: 'SAT' },
+];
+
+const DEFAULT_BUSINESS_DAYS = [1, 2, 3, 4, 5];
+const DEFAULT_CATEGORIES = [
+  'LUNCH|ランチ',
+  'BOWL / NOODLES|丼・麺',
+  'SIDE DISH|小鉢',
+  'DESSERT / SALAD|デザート / サラダ',
 ];
 
 function getWeekStartDate(date: Date): string {
@@ -71,10 +81,6 @@ export default function WeeklyMenuPage() {
     }
   }, [storeId, weekStartDate, router]);
 
-  const getMenuForDay = (dayOfWeek: number): WeeklyMenu | undefined => {
-    return menus.find(m => m.day_of_week === dayOfWeek);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen theme-menu particle-bg-menu flex items-center justify-center">
@@ -90,6 +96,38 @@ export default function WeeklyMenuPage() {
       </div>
     );
   }
+
+  const categoryList = store?.menu_categories?.length ? store.menu_categories : DEFAULT_CATEGORIES;
+  const daySelections = (store?.business_days?.length ? [...store.business_days] : [...DEFAULT_BUSINESS_DAYS]).sort(
+    (a, b) => a - b
+  );
+
+  const getDayMeta = (value: number) => DAYS_OF_WEEK.find((d) => d.value === value) || { value, label: '', full: '', short: '' };
+
+  const getDateForDay = (dayValue: number) => {
+    const base = new Date(weekStartDate);
+    const diff = ((dayValue - 1 + 7) % 7);
+    const date = new Date(base);
+    date.setDate(base.getDate() + diff);
+    return date;
+  };
+
+  const formatDateLabel = (date: Date) => {
+    const month = (date.getMonth() + 1).toString();
+    const day = date.getDate().toString();
+    return `${month}.${day}`;
+  };
+
+  const normalizeCategory = (label: string) => label.split('|')[0].trim().toLowerCase();
+
+  const findMenuForCell = (dayValue: number, categoryLabel: string) => {
+    const key = normalizeCategory(categoryLabel);
+    return menus.find(
+      (menu) =>
+        menu.day_of_week === dayValue &&
+        (normalizeCategory(menu.category || '') === key)
+    );
+  };
 
   return (
     <div className="min-h-screen theme-menu particle-bg-menu pb-20">
@@ -130,46 +168,64 @@ export default function WeeklyMenuPage() {
         </div>
       )}
 
-      {/* 週間メニュー一覧 */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
-        <div className="space-y-4">
-          {DAYS_OF_WEEK.map((day) => {
-            const menu = getMenuForDay(day.value);
-            return (
-              <div key={day.value} className="restaurant-card restaurant-card-menu p-6">
-                <div className="flex items-start space-x-4">
-                  {menu?.image_url && (
-                    <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 shadow-lg menu-image-container">
-                      <img
-                        src={menu.image_url}
-                        alt={menu.menu_name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <span className="text-xl font-bold gradient-text gradient-text-menu">{day.full}</span>
-                      {menu?.category && (
-                        <span className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-full font-semibold">
-                          {menu.category}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-lg text-[#2C1810] mb-1 font-semibold">
-                      {menu ? menu.menu_name : '未設定'}
-                    </p>
-                    {menu?.price && (
-                      <p className="text-lg font-bold gradient-text gradient-text-menu">
-                        ¥{menu.price.toLocaleString()}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      {/* 週間メニュー表 */}
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        <div className="bg-white/90 rounded-3xl shadow-xl p-4 overflow-x-auto">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="w-48 p-4 text-left text-sm font-semibold text-[#8B7355] uppercase tracking-wide">
+                  WEEKLY MENU
+                </th>
+                {daySelections.map((day) => {
+                  const meta = getDayMeta(day);
+                  const date = formatDateLabel(getDateForDay(day));
+                  return (
+                    <th key={day} className="p-4 text-center border-l border-[#f0dcd0]">
+                      <div className="text-xs font-semibold text-[#8B7355] uppercase">{meta.short}</div>
+                      <div className="text-sm text-[#8B7355]">{meta.label} {date}</div>
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {categoryList.map((category) => {
+                const [primary, secondary] = category.split('|').map((part) => part?.trim());
+                return (
+                  <tr key={category}>
+                    <td className="align-top p-4 border-t border-[#f0dcd0] bg-[#FFF4EA]">
+                      <div className="text-base font-bold text-[#4E2A10] uppercase">{primary}</div>
+                      {secondary && <div className="text-xs text-[#8B7355]">{secondary}</div>}
+                    </td>
+                    {daySelections.map((day) => {
+                      const menu = findMenuForCell(day, category);
+                      return (
+                        <td key={`${category}-${day}`} className="align-top p-4 border-t border-l border-[#f0dcd0] bg-white/90">
+                          {menu ? (
+                            <div>
+                              <p className="text-sm font-semibold text-[#2C1810] leading-snug">{menu.menu_name}</p>
+                              {menu.price && (
+                                <p className="text-xs text-[#8B7355] mt-1">¥{menu.price.toLocaleString()}</p>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-[#C1B5A5]">準備中</p>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-center text-xs text-[#8B7355] space-y-1">
+          <p>※ 日替わりデザートかサラダが付きます</p>
+          <p>※ ランチの成分値にはご飯と汁物の成分値は含まれておりません</p>
+          <p>※ 数値は仕入れ状況により変更になることがあります</p>
         </div>
       </div>
 

@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
-import { resizeForList } from '@/lib/imageUtils';
 
 const MONTHS = [
   '1月', '2月', '3月', '4月', '5月', '6月',
@@ -20,24 +19,28 @@ function NewMonthlyMenuContent() {
   const [category, setCategory] = useState('');
   const [menuName, setMenuName] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState(yearParam ? parseInt(yearParam) : new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(monthParam ? parseInt(monthParam) : new Date().getMonth() + 1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/stores/profile');
+        setCategories(response.data.menu_categories || []);
+      } catch (err) {
+        console.error('Failed to fetch store profile:', err);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length === 0) return;
+    setCategory((prev) => (prev ? prev : categories[0]));
+  }, [categories, category]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,37 +54,11 @@ function NewMonthlyMenuContent() {
     setLoading(true);
 
     try {
-      let imageUrl = null;
-      if (imageFile) {
-        // 画像をリサイズ（一覧表示用、最大800px）
-        const resizedImage = await resizeForList(imageFile, 800);
-        
-        // 画像をSupabase Storageにアップロード
-        try {
-          const uploadResponse = await api.post('/upload/image/base64', {
-            base64: resizedImage,
-            filename: imageFile.name || `monthly-menu-${Date.now()}.jpg`,
-          });
-          
-          if (uploadResponse.data?.url) {
-            imageUrl = uploadResponse.data.url;
-          } else {
-            console.warn('画像アップロードのURLが取得できませんでした。Base64を直接使用します。');
-            imageUrl = resizedImage;
-          }
-        } catch (uploadError: any) {
-          console.error('画像アップロードエラー:', uploadError);
-          const uploadErrorMsg = uploadError.response?.data?.error || uploadError.message || '画像のアップロードに失敗しました';
-          console.warn('画像アップロードに失敗しましたが、Base64を直接使用して続行します。', uploadErrorMsg);
-          imageUrl = resizedImage;
-        }
-      }
-
       await api.post('/monthly-menus', {
         menu_name: menuName.trim(),
         category: category.trim() || null,
         price: price ? parseInt(price) : null,
-        image_url: imageUrl,
+        image_url: null,
         month: selectedMonth,
         year: selectedYear,
       });
@@ -157,48 +134,27 @@ function NewMonthlyMenuContent() {
             </div>
           </div>
 
-          {/* 画像プレビュー */}
-          <div className="apple-card p-6">
-            <label className="block text-sm font-semibold text-[#8E8E93] mb-4 uppercase tracking-wide">
-              メニュー写真（任意）
-            </label>
-            <div className="w-full aspect-square bg-[#F2F2F7] rounded-2xl overflow-hidden relative group">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-[#8E8E93]">
-                  <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <p className="text-sm">画像を選択してください（任意）</p>
-                </div>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-            </div>
-          </div>
-
           {/* カテゴリー */}
           <div className="apple-card p-6">
             <label htmlFor="category" className="block text-sm font-semibold text-[#8E8E93] mb-3 uppercase tracking-wide">
               カテゴリー
             </label>
-            <input
-              id="category"
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="例: ランチ、ディナー、デザート"
-              className="apple-input"
-            />
+            {categories.length > 0 ? (
+              <select
+                id="category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="apple-input"
+              >
+                {categories.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p className="text-sm text-[#8E8E93]">カテゴリーが未設定です。プロフィール設定から追加してください。</p>
+            )}
           </div>
 
           {/* メニュー名 */}

@@ -17,6 +17,8 @@ router.get('/profile', authenticateAdmin, async (req: AuthRequest, res) => {
       store_id: store.store_id,
       name: store.name,
       profile_image_url: store.profile_image_url,
+      menu_categories: store.menu_categories || [],
+      business_days: store.business_days || [],
     });
   } catch (error) {
     console.error('Get store profile error:', error);
@@ -38,6 +40,8 @@ router.put('/profile', authenticateAdmin, async (req: AuthRequest, res) => {
       store_id: updatedStore.store_id,
       name: updatedStore.name,
       profile_image_url: updatedStore.profile_image_url,
+      menu_categories: updatedStore.menu_categories || [],
+      business_days: updatedStore.business_days || [],
     });
   } catch (error) {
     console.error('Update store profile error:', error);
@@ -60,6 +64,8 @@ router.get('/:store_id', async (req, res) => {
       store_id: store.store_id,
       name: store.name,
       profile_image_url: store.profile_image_url,
+      menu_categories: store.menu_categories || [],
+      business_days: store.business_days || [],
     });
   } catch (error) {
     console.error('Get store error:', error);

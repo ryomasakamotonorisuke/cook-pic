@@ -40,7 +40,15 @@ export class MenuModel {
         `INSERT INTO menus (store_id, name, category, price, image_url, menu_type, date)
          VALUES ($1, $2, $3, $4, $5, $6, $7)
          RETURNING *`,
-        [menu.store_id, menu.name, menu.category || null, menu.price, menu.image_url, menu.menu_type, menu.date]
+        [
+          menu.store_id,
+          menu.name,
+          menu.category || null,
+          menu.price,
+          menu.image_url || null,
+          menu.menu_type,
+          menu.date,
+        ]
       );
 
       console.log('MenuModel.create - Result:', result.rows[0] ? 'Success' : 'No rows returned');
